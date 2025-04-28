@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import {spotifyProxy} from "../services/spotifyService.ts";
+import {getLyrics, spotifyProxy} from "../services/spotifyService.ts";
 
 interface Track {
     id: string;
@@ -39,8 +38,9 @@ const FullScreenPlayer: React.FC = () => {
     const fetchLyrics = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:3000/api/lyrics?artist=${encodeURIComponent(track?.artists[0]?.name || '')}&title=${encodeURIComponent(track?.name || '')}`);
+            const response = await getLyrics(encodeURIComponent(track?.artists[0]?.name || ''), encodeURIComponent(track?.name || ''));
             setLyrics(response.data.lyrics || 'Лирики не найдены');
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             setLyrics('Ошибка при загрузке лирик');
         } finally {

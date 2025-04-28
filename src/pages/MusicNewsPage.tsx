@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import {getNews} from "../services/spotifyService.ts";
 
 interface NewsArticle {
     title: string;
@@ -22,14 +22,10 @@ const MusicNewsPage: React.FC = () => {
         setLoading(true);
         const fetchNews = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/api/music-news', {
-                    params: {
-                        page: currentPage,
-                        pageSize,
-                    },
-                });
+                const response = await getNews(currentPage, pageSize);
                 setNews(response.data.articles);
                 setTotalResults(response.data.totalResults); // Store the total number of results
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error) {
                 setError('Failed to load news.');
             } finally {
